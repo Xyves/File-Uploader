@@ -1,0 +1,47 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String?  @unique
+  username String
+  password String
+  role     Role     @default(USER)
+  folders  Folder[]
+}
+
+model Folder {
+  id       Int    @id @default(autoincrement())
+  title    String
+  author   User   @relation(fields: [authorId], references: [id])
+  authorId Int
+  files    File[]
+}
+
+model File {
+  id         Int      @id @default(autoincrement())
+  title      String
+  content    String?
+  size       Int
+  url        String
+  filetype   String
+  uploaded   DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  Folder     Folder   @relation(fields: [folderId], references: [id])
+  folderId   Int
+  expireDate DateTime @default("9999-12-31T23:59:59.999Z")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
