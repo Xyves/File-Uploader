@@ -1,4 +1,4 @@
-import { PrismaClient } from "@prisma/client";
+const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
@@ -18,9 +18,15 @@ const getFile = async (fileId) => {
   const file = await prisma.file.findUnique({ where: { id: fileId } });
   return file[0];
 };
+const getUser = async (id, username) => {
+  const username = await prisma.user.findUnique({
+    where: { username: username },
+  });
+};
 module.exports = {
   getFolders,
   getFolder,
   getFiles,
   getFile,
+  getUser,
 };
