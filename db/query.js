@@ -19,9 +19,17 @@ const getFile = async (fileId) => {
   return file[0];
 };
 const getUser = async (id, username) => {
-  const username = await prisma.user.findUnique({
-    where: { username: username },
-  });
+  if (id !== null) {
+    const username = await prisma.user.findUnique({
+      where: { id: id },
+    });
+    return username[0];
+  } else {
+    const user = await prisma.user.findUnique({
+      where: { username: username },
+    });
+    return user[0];
+  }
 };
 module.exports = {
   getFolders,
