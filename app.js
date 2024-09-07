@@ -1,5 +1,7 @@
 const express = require("express");
 const ejs = require("express");
+const { PrismaClient } = require('@prisma/client');
+const prisma = new PrismaClient();
 const bodyParser = require("body-parser");
 require("./controllers/passport");
 const app = express();
@@ -7,11 +9,23 @@ const path = require("path");
 var passport = require("passport");
 const session = require("express-session");
 const usersRouter = require("./routes/router");
+async function main() {
+  const users = await prisma.user.findMany();
+  console.log(users);
+}
 
+main()
+  .catch(e => {
+    throw e;
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.static(path.join(__dirname, "public")));
+app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
     secret: process.env.secret,
