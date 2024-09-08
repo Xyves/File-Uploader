@@ -1,7 +1,8 @@
 const { PrismaClient } = require("@prisma/client");
-
+const { uuid } = require('uuidv4');
 const prisma = new PrismaClient();
-
+const bcrypt = require("bcryptjs")
+// when fetching all messages
 const getFolders = async () => {
   const folders = await prisma.folder.findMany();
   return folders;
@@ -25,16 +26,51 @@ const getUser = async (id, username) => {
     });
     return username[0];
   } else {
-    const user = await prisma.user.findUnique({
+    const user = await prisma.user.findFirst({
       where: { username: username },
     });
     return user[0];
   }
 };
+const createUser = async(username,plainPassword,email,secret)=>{
+  console.log(plainPassword)
+  const hashedPassword = bcrypt.hashSync(plainPassword, 5);
+  let isAdmin = (secret === process.env.roleCode);
+ 
+  await prisma.user.create({
+    data:{
+      username,
+      password:hashedPassword,
+      email,
+      role: isAdmin === true ? 'ADMIN' : "USER",
+    }
+  })
+
+}
+const getUserByName = async(name)=>{
+ const user =  await prisma.user.findUnique({
+    where:{username:name}
+  })
+  return user
+}
+const getUserById = async(id)=>{
+  const user =  await prisma.user.findUnique({
+    where:{id:id}
+  })
+  return user
+}
+const createFolder = async(title,authorId)=>{
+  await prisma.folder.create({
+    data:{
+      title,
+      authorId
+    }
+  })
+}
 module.exports = {
   getFolders,
   getFolder,
   getFiles,
   getFile,
-  getUser,
+  getUser,createUser,getUserByName,getUserById
 };
