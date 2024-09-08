@@ -10,7 +10,7 @@ datasource db {
 model User {
   id       Int      @id @default(autoincrement())
   email    String?  @unique
-  username String @db.VarChar(255)
+  username String @db.VarChar(255) @unique
   password String @db.VarChar(255)
   role     Role     @default(USER)
   folders  Folder[]

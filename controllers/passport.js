@@ -2,13 +2,13 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const db = require("../db/query");
 const bcrypt = require("bcryptjs");
-const customFields = {
-  usernameField: "uname",
-  passwordField: "pw",
-};
+// const customFields = {
+//   usernameField: "uname",
+//   passwordField: "pw",
+// };
 const verifyCallback = async (username, password, done) => {
   try {
-    const user = await db.getUser(null, username);
+    const user = await db.getUserByName(username)
     console.log(user);
 
     if (!user) {
@@ -28,14 +28,14 @@ const verifyCallback = async (username, password, done) => {
     return done(err);
   }
 };
-const strategy = new LocalStrategy(customFields, verifyCallback);
+const strategy = new LocalStrategy( verifyCallback);
 
 passport.use(strategy);
 passport.serializeUser((user, done) => {
   done(null, user.id);
 });
 passport.deserializeUser((userId, done) => {
-  db.findById(userId, null)
+  db.getUserById(userId, null)
     .then((user) => {
       done(null, user);
     })

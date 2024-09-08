@@ -2,7 +2,7 @@ const db = require("../db/query.js");
 
 const getIndex = async (req, res) => {
   // const folders = await db.getFolders();
-  res.render("index.ejs");
+  res.render("index.ejs",{user: req.user});
 };
 const getFolder = async (req, res) => {
   // Take files using db.getFiles / db.getFolder id
@@ -27,17 +27,17 @@ const getSignup = async (req, res, next) => {
   res.render("signup.ejs");
 };
 const postSignup = async (req, res) => {
-  try {
-    res.status(200).json({
-      message: "successfuly registered",
-      code: 200,
-      timestamp: Date.now(),
-    });
-    createUser(req.body.username,req.body.password)
+  // try {
+  //   res.status(200).json({
+  //     message: "successfuly registered",
+  //     code: 200,
+  //     timestamp: Date.now(),
+  //   });
+    await db.createUser(req.body.username,req.body.password,req.body.email,req.body.secret)
     res.redirect("/")
-  } catch (e) {
-    throw new Error() * e;
-  }
+  // } catch (e) {
+  //   throw new Error() * e;
+  // }
 };
 const postLogin = async (req, res) => {
   try {
