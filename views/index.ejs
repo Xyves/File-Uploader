@@ -3,12 +3,45 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <link rel="stylesheet" href="./stylesheets/style.css" />
     <title>Home</title>
   </head>
-  <body class="bg-slate-600">
+  <body class="bg-[url('../assets/dark-1845685_1920.jpg')]">
     <%- include("partials/nav.ejs" ) %>
-    <h2 class="text-red-500">Boring</h1>
-    <!-- If(user) -->
+      <% if (user){%>
+        <h3>User is logged in!</h3>
+        <h3>Hi <%= user.username %></h3>
+<div class="container flex  bg-gray-700 mx-auto p-7 text-white">
+  <div class="folder-layout W-3/4 ">
+    <div class="top-layout">
+      <div class="links flex">
+        <a href="/">
+        <img src="./assets/home-custom.png" alt="" srcset="">
+        </a>
+        <span>> FileFlow</span>
+      </div>
+      <div class="create-folder my-6">
+        <!-- Folder + icon  -->
+         <a href="/folders/create">
+         <img src="./assets/folder-plus-custom.png" alt="" srcset="">
+         </a>
+      </div>
+    </div>
+     <div class="bottom-layout">
+      <ul class="folders">
+        <% if(folders && folders.length > 0) { %>
+          <% folders.forEach((folder) => { %>
+            <li>Name: <%= folder.title %></li>
+          <% }) %>
+        <% } else { %>
+          <li>No folders found</li>
+        <% } %>
+    </ul>
+  </div>
+  </div>
+</div>
+      <%} else{%>
+        <h2>User is not logged in!</h2>
+        <% }%>
   </body>
 </html>
