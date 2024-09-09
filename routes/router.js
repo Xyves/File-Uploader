@@ -24,6 +24,8 @@ appRouter.get("/logout", (req, res, next) => {
     res.redirect("/");
   });
 });
+appRouter.get("/folders/create")
+appRouter.get("/folders/:id",controllers.getFolder)
 appRouter.all("*", async (req, res) => {
   try {
     res.status(404).json({
