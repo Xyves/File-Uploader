@@ -2,7 +2,11 @@
 module.exports = {
   content: ["./views/**/*.ejs"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        'body-background': "url('./assets/dark-1845685_1920.jpg')",
+      }
+    },
   },
   plugins: [require("tailwindcss"), require("autoprefixer")],
 };
