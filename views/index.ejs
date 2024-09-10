@@ -22,16 +22,25 @@
       </div>
       <div class="create-folder my-6">
         <!-- Folder + icon  -->
-         <a href="/folders/create">
-         <img src="./assets/folder-plus-custom.png" alt="" srcset="">
+         <form action="/folders/create" method="post">
+          <input type="text" name="name">
+          <button type="submit">
+           <img src="./assets/folder-plus-custom.png" alt="" srcset="">
+          </button>
+         </form>
          </a>
       </div>
     </div>
      <div class="bottom-layout">
-      <ul class="folders">
+      <ul class="folders flex flex-row ">
         <% if(folders && folders.length > 0) { %>
           <% folders.forEach((folder) => { %>
-            <li>Name: <%= folder.title %></li>
+            <div class="folder mx-5 items-center justify-center">
+              <div class="folder-image flex justify-center items-center">
+                <img src="../assets/icons8-folder-64.png" alt="" class="cursor-pointer">
+              </div>
+              <li class="flex items-center justify-center"><a href="/folder/<%= folder.id %>"><%= folder.title%> </li>
+            </div>
           <% }) %>
         <% } else { %>
           <li>No folders found</li>
