@@ -2,11 +2,47 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="./stylesheets/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%= title %></title>
+    <link rel="stylesheet" href="/stylesheets/style.css" />
+    <title><%= folder.title %></title>
   </head>
-  <body>
-    <%= folder.title %>
+  <body class="bg-[url('/assets/dark-1845685_1920.jpg')]">
+    <%- include("partials/nav.ejs" ) %>
+    <div class="container flex  bg-gray-700 mx-auto p-7 text-white">
+      <div class="folder-layout W-3/4 ">
+        <div class="top-layout">
+          <div class="links flex">
+            <a href="/">
+            <img src="/assets/home-custom.png" alt="" srcset="">
+            </a>
+            <a href="<%=folder.id %>">> <%= folder.title%></a>
+          </div>
+          <div class="create-folder my-6">
+            <!-- Folder + icon  -->
+             <form action="/files/create" method="post">
+              <span>Upload File</span>
+              <button type="submit">
+               <img src="/assets/upload-file/icons8-upload-file-32.png" alt="" srcset="">
+              </button>
+             </form>
+             </a>
+          </div>
+        </div>
+         <div class="bottom-layout">
+    <% if(files && files.length > 0) { %>
+      <% files.forEach((file) => { %>
+        <div class="file mx-5 items-center justify-center">
+          <div class="file-image flex justify-center items-center">
+            <img src="../assets/icons8-folder-64.png" alt="" class="cursor-pointer">
+          </div>
+          <li class="flex items-center justify-center"><a href="/file/<%= file.id %>"><%= file.title%> </li>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <li>No files found</li>
+    <% } %>
+  </div>
+</div>
+</div>
   </body>
 </html>
