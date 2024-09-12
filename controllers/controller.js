@@ -1,14 +1,24 @@
+const { uuid } = require("uuidv4");
 const db = require("../db/query.js");
-
+const multer = require('multer');
+const upload = multer().single('file');
 const getIndex = async (req, res) => {
-  // const folders = await db.getFolders();
-  res.render("index.ejs",{user: req.user});
+  const folders = await db.getFolders();
+  res.render("index.ejs",{user: req.user,folders});
 };
 const getFolder = async (req, res) => {
   // Take files using db.getFiles / db.getFolder id
   const folder = await db.getFolder(req.params.id);
-  res.render("folder.ejs", { title: folder.title, files: folder.files });
+  const files = await db.getFiles(req.params.id)
+  res.render("folder.ejs", { folder, files });
 };
+const getCreateFile = async(req,res)=>{
+  res.render("createFile.ejs")
+}
+const postCreateFile = async(req,res)=>{
+  
+}
+// const file = {id:uuid(),url:req.body.url,}
 const getFile = async (req, res) => {
   const file = await db.getFile(req.params.id);
   res.render("file.ejs", {
@@ -39,6 +49,11 @@ const postSignup = async (req, res) => {
   //   throw new Error() * e;
   // }
 };
+
+const createFolder = async (req,res)=>{
+ await db.createFolder(req.body.name,req.user.id)
+ res.redirect("/")
+}
 const postLogin = async (req, res) => {
   try {
     res.status(200).json({
@@ -61,6 +76,7 @@ const postLogout = async (req, res) => {
     throw new Error(e);
   }
 };
+
 module.exports = {
   getIndex,
   getFile,
@@ -68,4 +84,5 @@ module.exports = {
   getSignup,
   getFolder,
   postSignup,
+  createFolder,getCreateFile,postCreateFile
 };
