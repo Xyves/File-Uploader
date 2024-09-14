@@ -1,9 +1,17 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Fascinate+Inline&display=swap');
+body{
+  background-image: url("../../assets/dark-1845685_1920.jpg")  !important;
+}
 h1 {
-  color: red;
+  color: blue;
 }
 .text-red {
   color: red;
+}
+.main-logo{
+  font-family: "Fascinate Inline", system-ui;
+  font-size: 1.5rem;
 }
