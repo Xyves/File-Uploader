@@ -8,6 +8,7 @@
   </head>
   <body class="bg-[url('/assets/dark-1845685_1920.jpg')]">
     <%- include("partials/nav.ejs" ) %>
+    <% if(user){ %>
     <div class="container flex  bg-gray-700 mx-auto p-7 text-white">
       <div class="folder-layout W-3/4 ">
         <div class="top-layout">
@@ -18,8 +19,8 @@
             <a href="<%=folder.id %>">> <%= folder.title%></a>
           </div>
           <div class="create-folder my-6">
-            <!-- Folder + icon  -->
-             <form action="/files/create" method="post">
+            <a href="/files/create?folderId=<%= folder.id %>">Create File</a>
+             <form action="/files/create" method="get">
               <span>Upload File</span>
               <button type="submit">
                <img src="/assets/upload-file/icons8-upload-file-32.png" alt="" srcset="">
@@ -31,11 +32,11 @@
          <div class="bottom-layout">
     <% if(files && files.length > 0) { %>
       <% files.forEach((file) => { %>
-        <div class="file mx-5 items-center justify-center">
-          <div class="file-image flex justify-center items-center">
-            <img src="../assets/icons8-folder-64.png" alt="" class="cursor-pointer">
+        <div class="file mx-5 items-center justify-center text-sm">
+          <div class="file-image flex justify-center items-center text-sm">
+            <img src="../assets/file/icons8-file-50.png" alt="" class="cursor-pointer">
           </div>
-          <li class="flex items-center justify-center"><a href="/file/<%= file.id %>"><%= file.title%> </li>
+          <li class="flex items-center justify-center "><a class=" " href="/file/<%= file.id %>"><%= file.title%> </li>
         </div>
       <% }) %>
     <% } else { %>
@@ -44,5 +45,8 @@
   </div>
 </div>
 </div>
+<% } else{ %>
+  <p>Login!</p>
+  <%} %> 
   </body>
 </html>

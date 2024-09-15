@@ -7,14 +7,16 @@
     <title>Sign Up</title>
   </head>
   <body>
+    <%- include("partials/nav.ejs" ) %>
     <form action="/signup" method="post">
-      <div>
+      <div class=" placeholder:text-black">
         <label for="username">username:</label>
-        <input type="text" name="username"/>
-        <label for="password">password:</label><input type="password" name="password"/><label for="email"
+        <input type="text" name="username" class="placeholder:text-black"/>
+        <label for="password">password:</label><input type="password" name="password"/>
+        <label for="passwordConfirmation">password confirmation:</label><input type="password" name="passwordConfirmation"/><label for="email"
           >email</label
         ><input type="email" name="email"/><label for="secret">Secret</label
-        ><input type="number" name="secret"/>
+        ><input type="number" name="secret" class="placeholder:text-black"/>
       </div>
       <button type="submit">Sign Up</button>
     </form>

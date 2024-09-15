@@ -11,8 +11,17 @@
     <nav class="">
       <ul class="flex w-full min-h-5 items-center justify-end bg-gray-700 border-b">
         <li class=" main-logo  py-4 px-6 mr-auto text-4xl text-white"><a href="/" class="">FileFlow</a></li>
-        <li class="text-2xl text-white py-4 px-6"><a href="/login">Login</a></li>
-        <li class="text-2xl text-white py-4 px-6"><a href="/signup">Register</a></li>
+        <li class="text-2xl text-white py-4 px-6"><a href="<%= user ? '/logout' : '/login' %>">
+          <%= user ? 'Logout' : 'Login' %>
+        </a>
+         </li>
+
+        <li class="text-2xl text-white py-4 px-6">
+          <% if (!user) { %>
+            <a href="/signup">Register</a>
+          <% } else { %>
+          <% } %>
+          </li>
       </ul>
     </nav>
   </body>

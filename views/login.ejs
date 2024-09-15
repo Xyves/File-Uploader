@@ -3,12 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="stylesheet" href="./stylesheets/style.css" />
-
-
     <meta name="viewport" content="width=	, initial-scale=1.0" />
     <title>Log In</title>
   </head>
   <body>
+    <%- include("partials/nav.ejs" ) %>
     <% if (user) {%>
       <h1>WELCOME BACK <%= user.username %></h1>
       <a href="/logout">LOG OUT</a>
