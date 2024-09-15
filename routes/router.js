@@ -2,12 +2,19 @@ const { Router } = require("express");
 const passport = require("passport");
 const appRouter = Router();
 const controllers = require("../controllers/controller");
-const { timeStamp } = require("console");
+const auth = require("../controllers/auth")
+
 appRouter.get("/", controllers.getIndex);
 appRouter.get("/folder:id", controllers.getFolder);
-appRouter.get("/file:id", controllers.getFile);
+appRouter.post("/folders/create",controllers.getCreateFile)
+appRouter.post("/files/create",controllers.postCreateFile)
+appRouter.get("/files/create",controllers.getCreateFile)
+appRouter.get("/folder/:id",controllers.getFolder)
+appRouter.get("/file/:id",controllers.getFile)
 appRouter.get("/login", controllers.getLogin);
 appRouter.get("/signup", controllers.getSignup);
+appRouter.post("/signup",auth.createUserValidation(),auth.validateMiddleware, controllers.postSignup);
+
 appRouter.post(
   "/login",
   passport.authenticate("local", {
@@ -15,7 +22,6 @@ appRouter.post(
     failureRedirect: "/"
   })
 );
-appRouter.post("/signup", controllers.postSignup);
 appRouter.get("/logout", (req, res, next) => {
   req.logout((err) => {
     if (err) {
@@ -24,8 +30,6 @@ appRouter.get("/logout", (req, res, next) => {
     res.redirect("/");
   });
 });
-appRouter.get("/folders/create")
-appRouter.get("/folders/:id",controllers.getFolder)
 appRouter.all("*", async (req, res) => {
   try {
     res.status(404).json({
