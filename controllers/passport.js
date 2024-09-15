@@ -2,10 +2,7 @@ const passport = require("passport");
 const LocalStrategy = require("passport-local").Strategy;
 const db = require("../db/query");
 const bcrypt = require("bcryptjs");
-// const customFields = {
-//   usernameField: "uname",
-//   passwordField: "pw",
-// };
+
 const verifyCallback = async (username, password, done) => {
   try {
     const user = await db.getUserByName(username)
@@ -21,7 +18,7 @@ const verifyCallback = async (username, password, done) => {
       console.log("Incorrect password");
       return done(null, false, { message: "Incorrect password" });
     }
-
+    
     console.log("username and password worked");
     return done(null, user);
   } catch (err) {
