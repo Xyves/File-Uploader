@@ -1,22 +1,42 @@
-const { uuid } = require("uuidv4");
 const db = require("../db/query.js");
-const multer = require('multer');
-const upload = multer().single('file');
+const storage = require("../storage/storage.js")
+const { uuid } = require('uuidv4');
+
+
 const getIndex = async (req, res) => {
   const folders = await db.getFolders();
   res.render("index.ejs",{user: req.user,folders});
 };
+
 const getFolder = async (req, res) => {
-  // Take files using db.getFiles / db.getFolder id
   const folder = await db.getFolder(req.params.id);
   const files = await db.getFiles(req.params.id)
-  res.render("folder.ejs", { folder, files });
+  res.render("folder.ejs", { folder, files,user: req.user });
 };
+
 const getCreateFile = async(req,res)=>{
-  res.render("createFile.ejs")
+  const folderId = req.query.folderId;
+  res.render("createFile.ejs",{user: req.user, folderId})
 }
+
 const postCreateFile = async(req,res)=>{
-  
+  const file = req.file
+  const  name  = req.body.name;
+
+
+  if (!file) {
+    return res.status(400).send('No file uploaded');
+  }
+  console.log('File name:', file.name);
+  console.log('File size:', file.size, 'bytes');
+  console.log('File type:', file.type);
+  const { folderId, fileName } = req.body;
+  const url = await storage.getFileUrl(name)
+  const {fileType,fileSize} = await storage.getFileMetadata(name)
+  console.log(url)
+  await storage.fileUpload(name,file)
+  await db.createFile(name,folderId,url,fileSize,fileType)
+  res.redirect("/");
 }
 // const file = {id:uuid(),url:req.body.url,}
 const getFile = async (req, res) => {
@@ -28,26 +48,28 @@ const getFile = async (req, res) => {
     upload: file.upload,
     filetype: file.filetype,
     download: file.url,
+    user: req.user
   });
 };
+
 const getLogin = async (req, res) => {
+  if(req.user){
+    res.redirect("/")
+  }
   res.render("login.ejs", { user: req.user });
 };
+
 const getSignup = async (req, res, next) => {
-  res.render("signup.ejs");
+  if(req.user){
+    res.redirect("/")
+  }
+  res.render("signup.ejs",{user: req.user});
 };
+
 const postSignup = async (req, res) => {
-  // try {
-  //   res.status(200).json({
-  //     message: "successfuly registered",
-  //     code: 200,
-  //     timestamp: Date.now(),
-  //   });
     await db.createUser(req.body.username,req.body.password,req.body.email,req.body.secret)
     res.redirect("/")
-  // } catch (e) {
-  //   throw new Error() * e;
-  // }
+
 };
 
 const createFolder = async (req,res)=>{

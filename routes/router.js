@@ -3,11 +3,13 @@ const passport = require("passport");
 const appRouter = Router();
 const controllers = require("../controllers/controller");
 const auth = require("../controllers/auth")
+const multer = require('multer');
+const upload = multer({ storage: multer.memoryStorage() });
 
 appRouter.get("/", controllers.getIndex);
 appRouter.get("/folder:id", controllers.getFolder);
 appRouter.post("/folders/create",controllers.getCreateFile)
-appRouter.post("/files/create",controllers.postCreateFile)
+appRouter.post("/files/create",upload.single('file'),controllers.postCreateFile)
 appRouter.get("/files/create",controllers.getCreateFile)
 appRouter.get("/folder/:id",controllers.getFolder)
 appRouter.get("/file/:id",controllers.getFile)

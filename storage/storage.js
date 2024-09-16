@@ -1,14 +1,16 @@
 const { createClient } = require('@supabase/supabase-js')
 const { uuid } = require('uuidv4');
-
+const multer = require("multer")
 const supabase = createClient(process.env.supabase_url,process.env.anon_key)
-
+const storage = multer.memoryStorage()
+const upload = multer({ storage: storage })
 const getFileUrl = async (name)=>{
-  const { data, error } =  await supabase
+  const { data, error } =  supabase
   .storage
-  .from('Files') // Same bucket name
+  .from('Files') 
   .getPublicUrl(name);
-  return data.signedUrl
+  console.log(data.publicUrl)
+  return data.publicUrl
 }
 const fileUpload = async (name,file) =>{
 try{
@@ -19,6 +21,16 @@ try{
 }catch(e){
   console.error(e)
 }
+}
+const getFileMetadata = async(name)=>{
+  const { data, error } = await supabase.storage.from("Files").download(name)
+  if (error) {
+    console.error('Error downloading file:', error)
+    return
+  }
+  const fileSize = data.size
+  const fileType = data.type 
+  return {fileSize,fileType}
 }
 const getFileFromBucket =async (name)=>{
   const { data, error } = await supabase
@@ -32,5 +44,5 @@ const getFileFromBucket =async (name)=>{
   return data
 }
 module.exports = {
-  getFileUrl,fileUpload,getFileFromBucket
+  getFileUrl,fileUpload,getFileFromBucket,getFileMetadata
 }
