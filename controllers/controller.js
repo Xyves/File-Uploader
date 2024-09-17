@@ -1,6 +1,7 @@
 const db = require("../db/query.js");
 const storage = require("../storage/storage.js")
 const { uuid } = require('uuidv4');
+const mime = require('mime-types');
 
 
 const getIndex = async (req, res) => {
@@ -21,21 +22,20 @@ const getCreateFile = async(req,res)=>{
 
 const postCreateFile = async(req,res)=>{
   const file = req.file
-  const  name  = req.body.name;
+  const  {name,folderId}  = req.body;
 
 
   if (!file) {
     return res.status(400).send('No file uploaded');
   }
+  let fileType = mime.extension(file.mimetype)
   console.log('File name:', file.name);
   console.log('File size:', file.size, 'bytes');
-  console.log('File type:', file.type);
-  const { folderId, fileName } = req.body;
+  console.log('File type mime:', file);
+  console.log('File type:', fileType);
   const url = await storage.getFileUrl(name)
-  const {fileType,fileSize} = await storage.getFileMetadata(name)
-  console.log(url)
   await storage.fileUpload(name,file)
-  await db.createFile(name,folderId,url,fileSize,fileType)
+  await db.createFile(name,folderId,url,file.size,fileType)
   res.redirect("/");
 }
 // const file = {id:uuid(),url:req.body.url,}
