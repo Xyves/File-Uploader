@@ -11,34 +11,32 @@ const getIndex = async (req, res) => {
 
 const getFolder = async (req, res) => {
   const folder = await db.getFolder(req.params.id);
+  // console.log(folder)
   const files = await db.getFiles(req.params.id)
+  req.session.folderId = folder.id
   res.render("folder.ejs", { folder, files,user: req.user });
 };
 
 const getCreateFile = async(req,res)=>{
-  const folderId = req.query.folderId;
+  const folderId = req.session.folderId;
+  // console.log(folderId)
   res.render("createFile.ejs",{user: req.user, folderId})
 }
 
 const postCreateFile = async(req,res)=>{
   const file = req.file
   const  {name,folderId}  = req.body;
-
+  let fileType = mime.extension(file.mimetype)
 
   if (!file) {
     return res.status(400).send('No file uploaded');
   }
-  let fileType = mime.extension(file.mimetype)
-  console.log('File name:', file.name);
-  console.log('File size:', file.size, 'bytes');
-  console.log('File type mime:', file);
-  console.log('File type:', fileType);
   const url = await storage.getFileUrl(name)
-  await storage.fileUpload(name,file)
+  // storage.downloadFile(url.publicUrl)
+  await storage.fileUpload(name,file,file.mimetype)
   await db.createFile(name,folderId,url,file.size,fileType)
   res.redirect("/");
 }
-// const file = {id:uuid(),url:req.body.url,}
 const getFile = async (req, res) => {
   const file = await db.getFile(req.params.id);
   res.render("file.ejs", {

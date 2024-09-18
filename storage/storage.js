@@ -12,16 +12,31 @@ const getFileUrl = async (name)=>{
   console.log(data.publicUrl)
   return data.publicUrl
 }
-const fileUpload = async (name,file) =>{
-try{
-  const { data, error } = await supabase.storage
-  .from('Files') 
-  .upload(name, file);   
-  return { data, error }
-}catch(e){
-  console.error(e)
-}
-}
+const fileUpload = async (name, file,fileType) => {
+  try {
+    if (!file) {
+      throw new Error('No file provided');
+    }
+
+    const { data, error } = await supabase.storage
+      .from('Files') 
+      .upload(name, file.buffer, {
+        contentType: fileType, 
+        cacheControl: '3600', 
+        upsert: false 
+      });   
+    if (error) {
+      console.error('File upload failed:', error.message);
+      return { data: null, error };
+    }
+    // console.log('File uploaded successfully:', data);
+    return { data, error };
+
+  } catch (e) {
+    console.error('An exception occurred during file upload:', e);
+    return { data: null, error: e.message };
+  }
+};
 const getFileMetadata = async(name)=>{
   const { data, error } = await supabase.storage.from("Files").download(name)
   if (error) {
@@ -43,6 +58,11 @@ const getFileFromBucket =async (name)=>{
   })
   return data
 }
+const downloadFile = async(url)=>{
+  const {data} = await supabase.storage.from("Files").getPublicUrl(url)
+  console.log(data)
+  return data
+}
 module.exports = {
-  getFileUrl,fileUpload,getFileFromBucket,getFileMetadata
+  getFileUrl,fileUpload,getFileFromBucket,getFileMetadata,downloadFile
 }

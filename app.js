@@ -9,18 +9,7 @@ const path = require("path");
 var passport = require("passport");
 const session = require("express-session");
 const usersRouter = require("./routes/router");
-async function main() {
-  const users = await prisma.user.findMany();
-  console.log(users);
-}
 
-main()
-  .catch(e => {
-    throw e;
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
@@ -38,11 +27,10 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use(passport.authenticate("session"));
 
 app.use((req, res, next) => {
-  console.log(req.session);
-  console.log(req.user);
+  // console.log(req.session);
+  // console.log(req.user);
   next();
 });
 app.use("/", usersRouter);
