@@ -17,7 +17,7 @@ const getFiles = async (id) => {
 };
 const getFile = async (fileId) => {
   const file = await prisma.file.findUnique({ where: { id: fileId } });
-  return file[0];
+  return file;
 };
 const getUser = async (id, username) => {
   if (id !== null) {
@@ -67,22 +67,37 @@ const createFolder = async(title,authorId)=>{
     }
   })
 }
-const createFile = async(title,folderId,url,uploaded)=>{
+const createFile = async(title,folderId,url,size,filetype)=>{
   await prisma.file.create({
     data:{
       id:uuid(),
-      title,
+      title:title,
       folderId,
       url,
-      uploaded
+      uploaded:new Date(),
+      size,
+      filetype
     }
   })
 }
-
+const removeFile= async(id)=>{
+  prisma.file.delete({
+    where:{
+      id:id
+    }
+  })
+}
+const removeFolder = async(id)=>{
+    prisma.folder.delete({
+      where:{
+        id:id
+      }
+    })
+}
 module.exports = {
   getFolders,
   getFolder,
   getFiles,
   getFile,createFolder,
-  getUser,createUser,getUserByName,getUserById,createFile
+  getUser,createUser,getUserByName,getUserById,createFile,removeFolder,removeFile
 };

@@ -8,7 +8,7 @@ const upload = multer({ storage: multer.memoryStorage() });
 
 appRouter.get("/", controllers.getIndex);
 appRouter.get("/folder:id", controllers.getFolder);
-appRouter.post("/folders/create",controllers.getCreateFile)
+appRouter.post("/folders/create",controllers.createFolder)
 appRouter.post("/files/create",upload.single('file'),controllers.postCreateFile)
 appRouter.get("/files/create",controllers.getCreateFile)
 appRouter.get("/folder/:id",controllers.getFolder)
@@ -16,7 +16,8 @@ appRouter.get("/file/:id",controllers.getFile)
 appRouter.get("/login", controllers.getLogin);
 appRouter.get("/signup", controllers.getSignup);
 appRouter.post("/signup",auth.createUserValidation(),auth.validateMiddleware, controllers.postSignup);
-
+appRouter.post("/files/delete",controllers.deleteFile)
+appRouter.post("/folder/delete",controllers.deleteFolder)
 appRouter.post(
   "/login",
   passport.authenticate("local", {

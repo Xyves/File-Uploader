@@ -14,6 +14,7 @@ const getFolder = async (req, res) => {
   // console.log(folder)
   const files = await db.getFiles(req.params.id)
   req.session.folderId = folder.id
+  console.log(files[0])
   res.render("folder.ejs", { folder, files,user: req.user });
 };
 
@@ -39,13 +40,18 @@ const postCreateFile = async(req,res)=>{
 }
 const getFile = async (req, res) => {
   const file = await db.getFile(req.params.id);
+  console.log(req.params.id)
+  console.log(file)
+  console.log(req.user)
   res.render("file.ejs", {
+    title:"File",
     id: file.id,
-    name: file.name,
+    name: file.title,
     size: file.size,
-    upload: file.upload,
+    uploaded: file.uploaded,
     filetype: file.filetype,
-    download: file.url,
+    url: file.url,
+    filetype: file.filetype,
     user: req.user
   });
 };
@@ -96,7 +102,14 @@ const postLogout = async (req, res) => {
     throw new Error(e);
   }
 };
+const deleteFile = async(req,res)=>{
+  storage.deleteFile(id)
+  db.deleteFile(id)
+}
+const deleteFolder = async(req,res)=>{
+  db.deleteFolder(id)
 
+}
 module.exports = {
   getIndex,
   getFile,
@@ -104,5 +117,5 @@ module.exports = {
   getSignup,
   getFolder,
   postSignup,
-  createFolder,getCreateFile,postCreateFile
+  createFolder,getCreateFile,postCreateFile,deleteFolder,deleteFile
 };
