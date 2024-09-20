@@ -45,7 +45,6 @@ const createUser = async(username,plainPassword,email,secret)=>{
       role: isAdmin === true ? 'ADMIN' : "USER",
     }
   })
-
 }
 const getUserByName = async(name)=>{
  const user =  await prisma.user.findUnique({
@@ -80,24 +79,26 @@ const createFile = async(title,folderId,url,size,filetype)=>{
     }
   })
 }
-const removeFile= async(id)=>{
+const deleteFile= async(id)=>{
   prisma.file.delete({
     where:{
       id:id
     }
   })
 }
-const removeFolder = async(id)=>{
-    prisma.folder.delete({
+const deleteFolder = async(id)=>{
+    const folder = prisma.folder.delete({
       where:{
         id:id
       }
     })
+    return folder
 }
+
 module.exports = {
   getFolders,
   getFolder,
   getFiles,
   getFile,createFolder,
-  getUser,createUser,getUserByName,getUserById,createFile,removeFolder,removeFile
+  getUser,createUser,getUserByName,getUserById,createFile,deleteFolder,deleteFile
 };
