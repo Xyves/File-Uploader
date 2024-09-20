@@ -10,31 +10,34 @@ datasource db {
 model User {
   id       Int      @id @default(autoincrement())
   email    String?  @unique
-  username String @db.VarChar(255) @unique
-  password String @db.VarChar(255)
+  username String   @unique @db.VarChar(255)
+  password String   @db.VarChar(255)
   role     Role     @default(USER)
   folders  Folder[]
 }
+
 model Folder {
-  id       String    @id @default(uuid())
+  id       String @id @default(uuid())
   title    String
-  author   User   @relation(fields: [authorId], references: [id])
+  author   User   @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId Int
   files    File[]
 }
+
 model File {
-  id         String      @id @default(uuid())
+  id         String    @id @default(uuid())
   title      String
   content    String?
   size       Int
   url        String
   filetype   String
-  uploaded   DateTime @default(now())
-  updatedAt  DateTime? @updatedAt 
-  Folder     Folder   @relation(fields: [folderId], references: [id])
+  uploaded   DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+  Folder     Folder    @relation(fields: [folderId], references: [id])
   folderId   String
-  expireDate DateTime @default("9999-12-31T23:59:59.999Z")
+  expireDate DateTime  @default("9999-12-31T23:59:59.999Z")
 }
+
 enum Role {
   USER
   ADMIN
