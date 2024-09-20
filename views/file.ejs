@@ -2,17 +2,18 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="stylesheet" href="./stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
   </head>
-  <body>
-    <h1>File Info:</h1>
-    <h2>Name</h2>
-    <h2>Type</h2>
-    <h2>Size</h2>
-    <h3>Date Uploaded:</h3>
-    <p>Uploaded by:</p>
+  <body class=" text-white text-4xl ">
+    <ul class="">
+      <li class="p-4" >File Info:</li>
+      <li class="p-4">Name : <%= name %></li>
+      <li class="p-4">Type <%= filetype %></li>
+      <li class="p-4">Size : <%= size %></li>
+      <li class="p-4">Date Uploaded: <%= uploaded %></li>
+    </ul>
     <button>
       <a href="<%= url %>" download>Download</a>
     </button>

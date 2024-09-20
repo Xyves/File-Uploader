@@ -8,7 +8,7 @@
 </head>
 <body class="text-white">
   <%- include("partials/nav.ejs" ) %>
-<form action="/files/create" method="post">
+<form action="/files/create" method="post" enctype="multipart/form-data">
   <input type="text" name="name" class="text-black">
   <input type="file" name="file" id="">
   <input type="hidden" name="folderId" value="<%= folderId %>">

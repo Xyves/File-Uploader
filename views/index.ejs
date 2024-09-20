@@ -18,12 +18,10 @@
         <a href="/">
         <img src="./assets/home-custom.png" alt="" srcset="">
         </a>
-        <span>></span>
       </div>
       <div class="create-folder my-6">
-        <!-- Folder + icon  -->
          <form action="/folders/create" method="post">
-          <input type="text" name="name">
+          <input type="text" name="name" placeholder="Enter folder name">
           <button type="submit">
            <img src="./assets/folder-plus-custom.png" alt="" srcset="">
           </button>
@@ -37,10 +35,15 @@
           <% folders.forEach((folder) => { %>
             <div class="folder mx-5 items-center justify-center">
               <div class="folder-image flex justify-center items-center">
+                <a href="/folder/<%= folder.id %>">
                 <img src="../assets/icons8-folder-64.png" alt="" class="cursor-pointer">
               </div>
-              <li class="flex items-center justify-center"><a href="/folder/<%= folder.id %>"><%= folder.title%> </li>
-            </div>
+              <li class="flex items-center justify-center"><%= folder.title%></a> </li>
+                <form action="/folders/delete"method="post">
+                  <input type="hidden" name="id" value="<%= folder.id %>">
+                  <button type="submit" >X</button>
+                </form>
+              </div>
           <% }) %>
         <% } else { %>
           <li>No folders found</li>
