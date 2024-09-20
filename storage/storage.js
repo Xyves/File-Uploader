@@ -29,7 +29,7 @@ const fileUpload = async (name, file,fileType) => {
       console.error('File upload failed:', error.message);
       return { data: null, error };
     }
-    // console.log('File uploaded successfully:', data);
+    // console.log('File uploaded successfully:', data); 
     return { data, error };
 
   } catch (e) {
@@ -63,6 +63,11 @@ const downloadFile = async(url)=>{
   console.log(data)
   return data
 }
+
+const removeFile = async(id,name)=>{
+const response = await supabase.from("Files").delete().eq("id",id)
+return response
+}
 module.exports = {
-  getFileUrl,fileUpload,getFileFromBucket,getFileMetadata,downloadFile
+  getFileUrl,fileUpload,getFileFromBucket,getFileMetadata,downloadFile,removeFile
 }
