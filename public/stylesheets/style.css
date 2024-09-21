@@ -549,6 +549,12 @@ video {
 .mr-auto {
   margin-right: auto;
 }
+.block {
+  display: block;
+}
+.inline-block {
+  display: inline-block;
+}
 .flex {
   display: flex;
 }
@@ -561,6 +567,12 @@ video {
 .min-h-full {
   min-height: 100%;
 }
+.w-1\/6 {
+  width: 16.666667%;
+}
+.w-4\/5 {
+  width: 80%;
+}
 .w-full {
   width: 100%;
 }
@@ -569,6 +581,9 @@ video {
 }
 .flex-row {
   flex-direction: row;
+}
+.flex-col {
+  flex-direction: column;
 }
 .items-center {
   align-items: center;
@@ -579,8 +594,39 @@ video {
 .justify-center {
   justify-content: center;
 }
+.justify-between {
+  justify-content: space-between;
+}
+.justify-around {
+  justify-content: space-around;
+}
+.self-center {
+  align-self: center;
+}
+.border-2 {
+  border-width: 2px;
+}
 .border-b {
   border-bottom-width: 1px;
+}
+.border-solid {
+  border-style: solid;
+}
+.border-blue-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(30 64 175 / var(--tw-border-opacity));
+}
+.border-green-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(22 101 52 / var(--tw-border-opacity));
+}
+.border-red-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(153 27 27 / var(--tw-border-opacity));
+}
+.border-yellow-800 {
+  --tw-border-opacity: 1;
+  border-color: rgb(133 77 14 / var(--tw-border-opacity));
 }
 .bg-gray-700 {
   --tw-bg-opacity: 1;
@@ -590,8 +636,9 @@ video {
   --tw-bg-opacity: 1;
   background-color: rgb(153 27 27 / var(--tw-bg-opacity));
 }
-.bg-\[url\(\'\.\.\/assets\/dark-1845685_1920\.jpg\'\)\] {
-  background-image: url('../assets/dark-1845685_1920.jpg');
+.bg-black {
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 .bg-\[url\(\'\/assets\/dark-1845685_1920\.jpg\'\)\] {
   background-image: url('/assets/dark-1845685_1920.jpg');
@@ -629,14 +676,16 @@ video {
   --tw-text-opacity: 1;
   color: rgb(0 0 0 / var(--tw-text-opacity));
 }
+.text-gray-font {
+  --tw-text-opacity: 1;
+  color: rgb(230 230 230 / var(--tw-text-opacity));
+}
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 @import url('https://fonts.googleapis.com/css2?family=Fascinate+Inline&display=swap');
-body{
-  background-image: url("../../assets/dark-1845685_1920.jpg")  !important;
-}
+
 h1 {
   color: blue;
 }
@@ -646,6 +695,9 @@ h1 {
 .main-logo{
   font-family: "Fascinate Inline", system-ui;
   font-size: 1.5rem;
+}
+body{
+  background-color: rgb(20, 20, 25);;
 }
 .placeholder\:text-black::-moz-placeholder {
   --tw-text-opacity: 1;
