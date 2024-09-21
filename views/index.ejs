@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./stylesheets/style.css" />
+    <link rel="stylesheet" href="/stylesheets/style.css" />
     <title>Home</title>
   </head>
-  <body class="bg-[url('../assets/dark-1845685_1920.jpg')]">
+  <body>
     <%- include("partials/nav.ejs" ) %>
       <% if (user){%>
         <h3>User is logged in!</h3>
@@ -34,7 +34,7 @@
         <% if(folders && folders.length > 0) { %>
           <% folders.forEach((folder) => { %>
             <div class="folder mx-5 items-center justify-center">
-              <div class="folder-image flex justify-center items-center">
+              <div class="folder-image flex justify-center items-center  ">
                 <a href="/folder/<%= folder.id %>">
                 <img src="../assets/icons8-folder-64.png" alt="" class="cursor-pointer">
               </div>

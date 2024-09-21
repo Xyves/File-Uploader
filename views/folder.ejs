@@ -9,17 +9,16 @@
   <body class="bg-[url('/assets/dark-1845685_1920.jpg')]">
     <%- include("partials/nav.ejs" ) %>
     <% if(user){ %>
-    <div class="container flex  bg-gray-700 mx-auto p-7 text-white">
-      <div class="folder-layout W-3/4 ">
-        <div class="top-layout">
+    <div class="container bg-gray-700 mx-auto p-7 text-white border-blue-800 border-solid border-2 flex flex-col">
+      <div class="folder-layout">
+        <div class="top-layout border-red-800 border-solid border-2 ">
           <div class="links flex">
             <a href="/">
             <img src="/assets/home-custom.png" alt="" srcset="">
             </a>
             <a href="<%=folder.id %>">> <%= folder.title%></a>
           </div>
-          <div class="create-folder my-6">
-            <a href="/files/create?folderId=<%= folder.id %>">Create File</a>
+          <div class="create-folder my-6 border-yellow-800 border-solid border-2">
              <form action="/files/create" method="get">
               <span>Upload File</span>
               <button type="submit">
@@ -29,25 +28,42 @@
              </a>
           </div>
         </div>
-         <div class="bottom-layout">
+      <ul class="files">
     <% if(files && files.length > 0) { %>
       <% files.forEach((file) => { %>
-        <div class="file mx-5 items-center justify-center text-sm">
-          <div class="file-image flex justify-center items-center text-sm">
-            <img src="../assets/file/icons8-file-50.png" alt="" class="cursor-pointer">
+        <ul class="file-container mx-5 text-sm w-4/5 border-green-800 border-solid border-2 flex flex-row items-center justify-between">
+          <li class=" flex flex-col border-white-800 border-solid border-2 w-1/6 justify-center items-center mr-auto">
+            <div class="image border-2 ">
+              <img src="../assets/file/icons8-file-50.png" alt="" class="cursor-pointer">
+              <span class="flex items-center justify-center "><a class=" " href="/file/<%= file.id %>"><%= file.title %>.<%= file.filetype %>
+            </div>
+          </li>
+          <div class="links flex ">
+            <li class="inline-block self-center"><%= file.size%></li>
+          <li class="inline-block">
+            <form action="/files/delete" method="post" >
+              <input type="hidden" name="fileId" value="<%= file.id %>">
+              <input type="hidden" name="fileType" value="<%= file.filetype %>">
+              <input type="hidden" name="fileName" value="<%= file.title %>">
+              <button class="p-2 " type="submit">
+                <img src="https://img.icons8.com/ios/40/waste.png"  >
+              </button>
+            </form>
+          </li class="inline-block">
+          <li class="inline-block"><img src="https://img.icons8.com/material-rounded/40/share.png" alt=""></li>
+          <li class="inline-block"> <img src="https://img.icons8.com/material-sharp/40/download--v1.png
+            " alt=""></li>
           </div>
-          <li class="flex items-center justify-center "><a class=" " href="/file/<%= file.id %>"><%= file.title %>.<%= file.filetype %>
-          <form action="/file/delete" method="post">
-            <input type="hidden" name="folderId" value="<%= folder.id %>">
-            <button class="p-2 bg-red-800 text-black" type="submit">X</button>
-          </form> </li>
-        </div>
+        </ul>
+
+         
+      </div>
       <% }) %>
     <% } else { %>
       <li>No files found</li>
     <% } %>
+    </ul>
   </div>
-</div>
 </div>
 <% } else{ %>
   <p>Login!</p>
