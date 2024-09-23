@@ -2,23 +2,38 @@ const db = require("../db/query.js");
 const storage = require("../storage/storage.js")
 const { uuid } = require('uuidv4');
 const mime = require('mime-types');
+const byteSize = require('byte-size')
 
 
 const getIndex = async (req, res) => {
+  if(!req.user){
+    res.redirect("/login")
+  }
   const folders = await db.getFolders();
   res.render("index.ejs",{user: req.user,folders});
 };
 
 const getFolder = async (req, res) => {
+  if(!req.user){
+    res.redirect("/")
+  }
   const folder = await db.getFolder(req.params.id);
-  // console.log(folder)
   const files = await db.getFiles(req.params.id)
+  const filesWithConvertedSizes = files.map(file => {
+    return {
+        ...file,  
+        size: byteSize(file.size) 
+    };
+});
   req.session.folderId = folder.id
   console.log(files[0])
-  res.render("folder.ejs", { folder, files,user: req.user });
+  res.render("folder.ejs", { folder, files:filesWithConvertedSizes,user: req.user });
 };
 
 const getCreateFile = async(req,res)=>{
+  if(!req.user){
+    res.redirect("/")
+  }
   const folderId = req.session.folderId;
   // console.log(folderId)
   res.render("createFile.ejs",{user: req.user, folderId})
@@ -32,6 +47,10 @@ const postCreateFile = async(req,res)=>{
   if (!file) {
     return res.status(400).send('No file uploaded');
   }
+  if(fileType === false){
+    return res.status(400).send('Wrong file extension');
+    
+  }
   const url = await storage.getFileUrl(name)
   // storage.downloadFile(url.publicUrl)
   await storage.fileUpload(name,file,file.mimetype)
@@ -39,10 +58,10 @@ const postCreateFile = async(req,res)=>{
   res.redirect("/");
 }
 const getFile = async (req, res) => {
+  if(!req.user){
+    res.redirect("/")
+  }
   const file = await db.getFile(req.params.id);
-  console.log(req.params.id)
-  console.log(file)
-  console.log(req.user)
   res.render("file.ejs", {
     title:"File",
     id: file.id,
@@ -73,42 +92,26 @@ const getSignup = async (req, res, next) => {
 const postSignup = async (req, res) => {
     await db.createUser(req.body.username,req.body.password,req.body.email,req.body.secret)
     res.redirect("/")
-
 };
 
 const createFolder = async (req,res)=>{
  await db.createFolder(req.body.name,req.user.id)
  res.redirect("/")
 }
-const postLogin = async (req, res) => {
-  try {
-    res.status(200).json({
-      message: "successfuly registered",
-      code: 200,
-      timestamp: Date.now(),
-    });
-  } catch (e) {
-    throw new Error() * e;
-  }
-};
-const postLogout = async (req, res) => {
-  try {
-    res.status(200).json({
-      message: "successfuly registered",
-      code: 200,
-      timestamp: Date.now(),
-    });
-  } catch (e) {
-    throw new Error(e);
-  }
-};
-const deleteFile = async(req,res)=>{
-  storage.deleteFile(id)
-  db.deleteFile(id)
-}
-const deleteFolder = async(req,res)=>{
-  db.deleteFolder(id)
 
+const deleteFile = async(req,res)=>{
+  const id = req.body.fileId
+  const type = req.body.fileType
+  await storage.deleteFile(id,type)
+  await db.deleteFile(id)
+  res.redirect(`/`)
+}
+
+const deleteFolder = async(req,res)=>{
+  const folderId = req.body.id
+  console.log(folderId)
+  await db.deleteFolder(folderId)
+  res.redirect("/")
 }
 module.exports = {
   getIndex,
