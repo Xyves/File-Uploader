@@ -37,16 +37,7 @@ const fileUpload = async (name, file,fileType) => {
     return { data: null, error: e.message };
   }
 };
-const getFileMetadata = async(name)=>{
-  const { data, error } = await supabase.storage.from("Files").download(name)
-  if (error) {
-    console.error('Error downloading file:', error)
-    return
-  }
-  const fileSize = data.size
-  const fileType = data.type 
-  return {fileSize,fileType}
-}
+
 const getFileFromBucket =async (name)=>{
   const { data, error } = await supabase
   .storage
@@ -64,10 +55,17 @@ const downloadFile = async(url)=>{
   return data
 }
 
-const removeFile = async(id,name)=>{
-const response = await supabase.from("Files").delete().eq("id",id)
-return response
+const deleteFile = async(id,fileName,fileExtension)=>{
+  const fullFileName = `${fileName}.${fileExtension}`;
+const {data,error} = await supabase.storage.from("Files").remove([fullFileName])
+if (error) {
+  console.error('Error deleting file:', error);
+  return error;
+} else {
+  console.log('File deleted successfully:', data);
+  return data;
+}
 }
 module.exports = {
-  getFileUrl,fileUpload,getFileFromBucket,getFileMetadata,downloadFile,removeFile
+  getFileUrl,fileUpload,getFileFromBucket,downloadFile,deleteFile
 }

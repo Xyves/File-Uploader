@@ -79,10 +79,11 @@ const createFile = async(title,folderId,url,size,filetype)=>{
     }
   })
 }
-const deleteFile= async(id)=>{
-  prisma.file.delete({
+const deleteFile= async(fileId)=>{
+  // console.log(id)
+  await prisma.file.delete({
     where:{
-      id:id
+      id:fileId
     }
   })
 }

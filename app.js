@@ -13,7 +13,7 @@ const usersRouter = require("./routes/router");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: false }));
 app.use(
   session({
@@ -30,9 +30,11 @@ app.use(passport.session());
 
 app.use((req, res, next) => {
   // console.log(req.session);
-  // console.log(req.user);
+
+  console.log(req.user);
   next();
 });
+
 app.use("/", usersRouter);
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Express app listening on port ${PORT}!`));
